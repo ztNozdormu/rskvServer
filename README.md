@@ -55,7 +55,13 @@
 typro操作:
 https://blog.csdn.net/supersuperboybai/article/details/105589309?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-105589309-blog-123541079.t0_edu_mix&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-105589309-blog-123541079.t0_edu_mix&utm_relevant_index=1
 
-
+### 练习进度
+* 2022-10-14 Server-3 目标 在服务器端使用内存来存储客户端发送过来的数据。在实现数据存储之前，我们先在客户端使用Clap库来解析命令行参数，并封装成命令发送给服务器。
+  1. 添加 Clap 库依赖,clap = { version = "4.0.15", , features = ["derive"]} 并指定features特性
+  2. 定义ClientArgs 命令参数数据结构
+  2. 定义存储模块和trait
+  3. 实现内存存储功能 使用第三方库 dashmap 
+  4. TODO
 
 
 
