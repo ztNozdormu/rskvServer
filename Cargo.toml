@@ -1,0 +1,21 @@
+[package]
+name = "kvserver"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.65"
+bytes = "1.2.1"
+futures = "0.3.24"
+prost = "0.11.0"
+serde = {version = "1.0.145", features = ["derive"] }  # 在新版本的serde中使用derive需要开启对应的features
+tokio = { version ="1.21.2", features = ["full"] }
+tokio-util = { version ="0.7.4", features = ["codec"] }
+toml = "0.5.9"
+tracing = "0.1.37"
+tracing-subscriber = "0.3.16"
+
+[build-dependencies]
+prost-build = "0.11"
