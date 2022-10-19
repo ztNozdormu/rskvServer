@@ -9,6 +9,7 @@ edition = "2021"
 anyhow = "1.0.65"
 bytes = "1.2.1"
 clap = { version = "4.0.15",features = ["derive"]}
+dashmap = "5.4.0"
 futures = "0.3.24"
 prost = "0.11.0"
 serde = {version = "1.0.145", features = ["derive"] }  # 在新版本的serde中使用derive需要开启对应的features
