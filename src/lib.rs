@@ -5,4 +5,4 @@ mod pb;
 
 pub use conf::*;
 pub use pb::cmd::*;
-pub use storage::storage::*;
+pub use storage::*;
