@@ -81,10 +81,11 @@ async fn process_cmd(req: CmdRequest,stor: &MemStorage) -> Result<CmdResponse,Bo
     CmdRequest {
        req_data:Some(ReqData::Set(Set{key,value,expire})),
     } => {
-       stor.set(&key,value)?;
+      let value = stor.set(&key,value)?;
        Ok(CmdResponse::new(200,"set success".to_string(),value.unwrap_or_default()))
     },
     _ => Err("Invalid command".into())
  }
+
 }
 

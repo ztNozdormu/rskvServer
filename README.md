@@ -47,7 +47,9 @@
 ### kvServer 运行命令
 
 1. 服务端运行命令 `RUST_LOG=info cargo run --bin kv_server`
-2. 客户端运行命令 `RUST_LOG=info cargo run --bin kv_client`
+2. 客户端运行命令 
+`RUST_LOG=info cargo run --bin kv_client set --key name --value 张三`
+`RUST_LOG=info cargo run --bin kv_client get --key name`
 
 ### 其他项 
 
