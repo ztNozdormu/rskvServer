@@ -63,7 +63,10 @@ https://blog.csdn.net/supersuperboybai/article/details/105589309?spm=1001.2101.3
   2. 定义ClientArgs 命令参数数据结构
   2. 定义存储模块和trait
   3. 实现内存存储功能 使用第三方库 dashmap 
-  4. TODO
+  4. 测试 get set 命令
+* 2022-10-20 server-4 封装命令执行service层 定义rocksDB存储功能
+  1. 
+
 
 
 
