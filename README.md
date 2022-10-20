@@ -2,6 +2,7 @@
 ### 项目说明
 
   rust练习,tokio做底层异步网络通讯、使用toml文件做配置、protobuf做传输协议、内存/RockDB做数据存储、事件通知、优雅关机、并发连接限制及测量监控等
+  TIKV分布式KV存储设计介绍:https://zhuanlan.zhihu.com/p/31142786 
 
 ### github开发项目初始化流程
  
