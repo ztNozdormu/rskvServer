@@ -12,6 +12,7 @@ clap = { version = "4.0.15",features = ["derive"]}
 dashmap = "5.4.0"
 futures = "0.3.24"
 prost = "0.11.0"
+rocksdb = "0.19.0"
 serde = {version = "1.0.145", features = ["derive"] }  # 在新版本的serde中使用derive需要开启对应的features
 tokio = { version ="1.21.2", features = ["full"] }
 tokio-util = { version ="0.7.4", features = ["codec"] }
