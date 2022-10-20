@@ -11,7 +11,7 @@ pub struct MemStorage {
 
 impl MemStorage { 
     #[warn(dead_code)]
-    pub fn new(&self) -> Self {
+    pub fn new() -> Self {
         MemStorage { map: Default::default() }
     }
 }

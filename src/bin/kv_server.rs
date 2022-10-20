@@ -1,9 +1,13 @@
 #[warn(non_snake_case)]
 use std::error::Error;
+use std::sync::Arc;
 use anyhow::Result;
-use bytes::Bytes;
 use futures::StreamExt;
 use futures::SinkExt;
+use kvserver::{Get,Set};
+use kvserver::Storage;
+use kvserver::cmd_request::ReqData;
+use kvserver::mem_storage::MemStorage;
 use kvserver::{ServerConfig, CmdRequest, CmdResponse};
 use prost::Message;
 use tokio::net::TcpListener;
@@ -19,7 +23,12 @@ async fn main() -> Result<(),Box<dyn Error>> {
     let addr = server_config.listen_address.addr;
     let listener = TcpListener::bind(&addr).await?;
     println!("服务器端启动,启动服务地址:[{}]",addr);
+
+    let storage = Arc::new(MemStorage::new());
     loop {
+
+        let stor = storage.clone();
+        
         let (tcp_stream,addr) = listener.accept().await.expect("读取信息失败!");
         
         tokio::spawn(async move {
@@ -46,10 +55,12 @@ async fn main() -> Result<(),Box<dyn Error>> {
                   let cmd_req = CmdRequest::decode(&buf[..]).unwrap();
                   info!("recived client command:{:?}",cmd_req);
                   
+                  let cmd_res = process_cmd(cmd_req,&stor).await.unwrap();
+                 
                   buf.clear();
 
                   // 对protobuf的请求响应进行封包，然后发送给客户端。
-                  let cmd_res = CmdResponse::new(200,"success".to_string(),Bytes::default());
+                //   let cmd_res = CmdResponse::new(200,"success".to_string(),Bytes::default());
                   cmd_res.encode(&mut buf).unwrap();
                   stream.send(buf.freeze()).await.unwrap();
             }
@@ -57,5 +68,23 @@ async fn main() -> Result<(),Box<dyn Error>> {
         });
     }
 
+}
+
+async fn process_cmd(req: CmdRequest,stor: &MemStorage) -> Result<CmdResponse,Box<dyn Error>> {
+ match req {
+    CmdRequest { 
+        req_data:Some(ReqData::Get(Get{key})),
+    } => {
+       let value = stor.get(&key)?;
+       Ok(CmdResponse::new(200,"get success".to_string(),value.unwrap_or_default()))
+    },
+    CmdRequest {
+       req_data:Some(ReqData::Set(Set{key,value,expire})),
+    } => {
+       stor.set(&key,value)?;
+       Ok(CmdResponse::new(200,"set success".to_string(),value.unwrap_or_default()))
+    },
+    _ => Err("Invalid command".into())
+ }
 }
 
