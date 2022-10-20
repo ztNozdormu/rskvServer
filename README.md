@@ -65,7 +65,15 @@ https://blog.csdn.net/supersuperboybai/article/details/105589309?spm=1001.2101.3
   3. 实现内存存储功能 使用第三方库 dashmap 
   4. 测试 get set 命令
 * 2022-10-20 server-4 封装命令执行service层 定义rocksDB存储功能
-  1. 
+  1. 定义rocksDB模块 实现storage trait
+  2. 创建service文件夹创建mod.rs, 定义CmdService trait
+  3. 创建cmd_service.rs文件,其中为get set命令实现CmdService trait
+  4. 实现从Bytes、&str、Box<dyn Error>转换为CmdResponse
+  5. mod.rs中实现service层代码
+  6. server.conf 中新增RocksDB配置(存储目录位置/tmp/kvserver),config.rs中新增rocksDB逻辑
+  7. 在kv_server.rs中使用service执行命令，替换process_cmd函数
+  8. 测试
+
 
 
 
