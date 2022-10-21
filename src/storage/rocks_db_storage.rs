@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use rocksdb::DB;
 use crate::storage::Storage;
 
@@ -12,8 +14,8 @@ impl RocksDbStorage {
 
 impl Storage for RocksDbStorage {
     fn get(&self,key: &str) -> Result<Option<bytes::Bytes>, Box<dyn std::error::Error>> {
-      let value = self.0.get(key)?.unwrap();
-      Ok(Some(value.into()))  
+        let value = self.0.get(key)?.unwrap();
+        Ok(Some(value.into()))  
     }
 
     fn set(&self,key: &str,value: bytes::Bytes) -> Result<Option<bytes::Bytes>, Box<dyn std::error::Error>> {
