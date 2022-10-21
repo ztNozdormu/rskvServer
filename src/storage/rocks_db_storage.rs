@@ -11,5 +11,13 @@ impl RocksDbStorage {
 }
 
 impl Storage for RocksDbStorage {
-    
+    fn get(&self,key: &str) -> Result<Option<bytes::Bytes>, Box<dyn std::error::Error>> {
+      let value = self.0.get(key)?.unwrap();
+      Ok(Some(value.into()))  
+    }
+
+    fn set(&self,key: &str,value: bytes::Bytes) -> Result<Option<bytes::Bytes>, Box<dyn std::error::Error>> {
+        self.0.put(key,value.clone()).unwrap();
+        Ok(Some(value))
+    }
 }
