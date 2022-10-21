@@ -1,6 +1,7 @@
 use bytes::Bytes;
- 
+use std::error::Error;
 use crate::{cmd_request::ReqData, CmdRequest, Get, Publish, Set, Subscribe, Unsubscribe, CmdResponse};
+
 pub mod cmd;
  
 impl CmdRequest {
@@ -46,7 +47,7 @@ impl CmdRequest {
         Self {
             req_data: Some(ReqData::Unsubscribe(Unsubscribe {
                 topic: topic.into(),
-               id,
+                id,
             })),
         }
     }
@@ -61,3 +62,33 @@ impl CmdResponse {
         }
     }
 }
+
+    // 实现从Bytes、&str、Box<dyn Error>转换为CmdResponse
+    impl From<Bytes> for CmdResponse {
+        fn from(bytes: Bytes) -> Self {
+            Self {
+                status: 200u32,
+                message: "success".to_string(),
+                value: bytes 
+            }
+        }
+    }
+    
+    impl From<&str> for CmdResponse {
+        fn from(str: &str) -> Self {
+            Self {  
+                status: 400u32,
+                message: str.to_string(),
+                ..Default::default()
+            }
+        }
+    }
+    impl From<Box<dyn Error>> for CmdResponse {
+        fn from(err: Box<dyn Error>) -> Self {
+            Self {
+                status: 500u32,
+                message: err.to_string(),
+                ..Default::default()
+            }
+        }
+    }    
