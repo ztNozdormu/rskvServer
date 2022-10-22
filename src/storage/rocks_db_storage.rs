@@ -7,7 +7,7 @@ use crate::storage::Storage;
 pub struct RocksDbStorage(DB);
 
 impl RocksDbStorage {
-    fn new(path: impl AsRef<Path>) -> Self {
+    pub fn new(path: impl AsRef<Path>) -> Self {
         Self(DB::open_default(path).unwrap())
     }
 }

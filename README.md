@@ -49,7 +49,7 @@
 
 1. 服务端运行命令 `RUST_LOG=info cargo run --bin kv_server`
 2. 客户端运行命令 
-`RUST_LOG=info cargo run --bin kv_client set --key name --value 张三`
+`RUST_LOG=info cargo run --bin kv_client set --key name --value 999999`
 `RUST_LOG=info cargo run --bin kv_client get --key name`
 
 ### 其他项 
@@ -74,6 +74,7 @@ https://blog.csdn.net/supersuperboybai/article/details/105589309?spm=1001.2101.3
   6. server.conf 中新增RocksDB配置(存储目录位置/tmp/kvserver),config.rs中新增rocksDB逻辑
   7. 在kv_server.rs中使用service执行命令，替换process_cmd函数
   8. 测试
+*  
 
 
 
