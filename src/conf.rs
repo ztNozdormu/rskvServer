@@ -5,12 +5,19 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Debug,Serialize,Deserialize)]
 pub struct ServerConfig {
-   pub listen_address : ListenAddress,
+  pub listen_address : ListenAddress,
+  pub rocks_db_path: RocksDbPath,
 }
 
 #[derive(Debug,Serialize,Deserialize)]
 pub struct ListenAddress{
   pub  addr: String,
+}
+
+// rocksdbPath
+#[derive(Debug,Serialize,Deserialize)]
+pub struct RocksDbPath {
+  pub rocks_db_path: String,
 }
 
 #[derive(Debug,Serialize,Deserialize)]
@@ -24,11 +31,11 @@ pub struct ConnectAddress{
 }
 
 impl ServerConfig {
-   pub fn load(path: &str) -> Result<Self,Box<dyn Error>> {
-      let  content = fs::read_to_string(path)?;
-      let server_config: Self = toml::from_str(&content)?;
-      Ok(server_config)
-   }
+  pub fn load(path: &str) -> Result<Self,Box<dyn Error>> {
+        let  content = fs::read_to_string(path)?;
+        let  server_config: Self = toml::from_str(&content)?;
+        Ok(server_config)
+  }
 } 
 
 impl ClientConfig {

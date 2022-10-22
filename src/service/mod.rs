@@ -33,9 +33,8 @@ impl <Store: Storage> Service<Store> {
         let cmd_res = process_cmd(&self.store_srv.store,cmd_req).await;
         cmd_res
     }
-   
 }
-
+// 实现Clone trait
 impl<Store> Clone for Service<Store> {
     fn clone(&self) -> Self {
         Self { store_srv: self.store_srv.clone() }
