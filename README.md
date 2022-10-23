@@ -74,7 +74,11 @@ https://blog.csdn.net/supersuperboybai/article/details/105589309?spm=1001.2101.3
   6. server.conf 中新增RocksDB配置(存储目录位置/tmp/kvserver),config.rs中新增rocksDB逻辑
   7. 在kv_server.rs中使用service执行命令，替换process_cmd函数
   8. 测试
-*  
+* 2022-10-23
+  1. 事件通知机制
+     *  事件注册函数
+     *  事件执行函数
+  2. 优雅关机  
 
 
 
