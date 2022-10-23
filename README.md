@@ -79,6 +79,9 @@ https://blog.csdn.net/supersuperboybai/article/details/105589309?spm=1001.2101.3
      *  事件注册函数
      *  事件执行函数
   2. 优雅关机  
+     *  当服务器端主线程收到Ctrl+c信号时，通过tokio的boardcast channel通知给所有的活跃连接；
+     *  各子线程处理完业务逻辑或资源清理后通过tokio的mpsc channel通知给主线程；
+     *  主线程停止运行，服务器关闭。
 
 
 
