@@ -50,7 +50,8 @@
 1. 服务端运行命令 `RUST_LOG=info cargo run --bin kv_server`
 2. 客户端运行命令 
 `RUST_LOG=info cargo run --bin kv_client set --key name --value 999999`
-`RUST_LOG=info cargo run --bin kv_client get --key name`
+`RUST_LOG=info cargo run --bin kv_client set --key age --value 18`
+`RUST_LOG=info cargo run --bin kv_client get --key age`
 
 ### 其他项 
 
