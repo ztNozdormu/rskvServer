@@ -8,7 +8,6 @@ use crate::CmdRequest;
 use crate::CmdResponse;
 use crate::Storage;
 use crate::cmd_request::ReqData;
-use crate::pb::cmd;
 use crate::storage::rocks_db_storage::RocksDbStorage;
 
 // 定义命令执行公共行为
@@ -30,7 +29,7 @@ pub struct StorageService<Store> {
 } 
 
 impl<Store> StorageService<Store> {
-    fn new(store: Store) -> Self {
+    pub fn new(store: Store) -> Self {
         Self { 
             store,
             on_recv_event: Vec::new(),

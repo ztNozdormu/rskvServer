@@ -4,7 +4,7 @@ use anyhow::Result;
 use futures::StreamExt;
 use futures::SinkExt;
 use kvserver::rocks_db_storage::RocksDbStorage;
-use kvserver::service::Service;
+use kvserver::service::{Service,StorageService};
 use kvserver::{ServerConfig, CmdRequest};
 use prost::Message;
 use tokio::net::TcpListener;
@@ -22,8 +22,11 @@ async fn main() -> Result<(),Box<dyn Error>> {
     println!("服务器端启动,启动服务地址:[{}]",addr);
 
     // 默认使用RocksDbStorage
-    let service = Service::new(RocksDbStorage::new(server_config.rocks_db_path.rocks_db_path));
-
+    let service: Service = StorageService::new(RocksDbStorage::new(server_config.rocks_db_path.rocks_db_path))
+                .register_recv_event(|req|info!("[DEBUG] Receive req: {:?}",req))
+                .register_exec_event(|res|info!("[DEBUG] Receive req: {:?}",res))
+                .register_res_event(|res|info!("[DEBUG] Receive req: {:?}",res))
+                .into();
     loop {
 
         let store_service = service.clone();
