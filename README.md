@@ -83,7 +83,14 @@ https://blog.csdn.net/supersuperboybai/article/details/105589309?spm=1001.2101.3
      *  当服务器端主线程收到Ctrl+c信号时，通过tokio的boardcast channel通知给所有的活跃连接；
      *  各子线程处理完业务逻辑或资源清理后通过tokio的mpsc channel通知给主线程；
      *  主线程停止运行，服务器关闭。
-
+* 2022-10-24
+  1. 并发连接限制   
+     服务器端使用tokio的Semaphore限制并发连接的最大数量。一旦达到限制数，服务器将停止接受新的连接，直到现有连接终止
+  2. 测量监控
+     性能监控和测量工具是 jaeger，在服务器端收集监控信息，发送给 jaeger 来查看执行流程及时间     
+     `tracing-appender = "0.1"
+      tracing-opentelemetry = "0.15"
+      opentelemetry-jaeger = "0.15"
 
 
 
