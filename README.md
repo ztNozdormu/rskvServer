@@ -88,9 +88,11 @@ https://blog.csdn.net/supersuperboybai/article/details/105589309?spm=1001.2101.3
      服务器端使用tokio的Semaphore限制并发连接的最大数量。一旦达到限制数，服务器将停止接受新的连接，直到现有连接终止
   2. 测量监控
      性能监控和测量工具是 jaeger，在服务器端收集监控信息，发送给 jaeger 来查看执行流程及时间     
-     `tracing-appender = "0.1"
-      tracing-opentelemetry = "0.15"
-      opentelemetry-jaeger = "0.15"
+     ` tracing-appender = "0.2.2"
+     tracing-opentelemetry = "0.18.0"
+     tracing-subscriber = {version = "0.3.16", features = [ "env-filter", "json" ]} `
+  3. 测试
+### 最终:感谢微信公众号[coding到灯火阑珊]对rust知识的传播
 
 
 
