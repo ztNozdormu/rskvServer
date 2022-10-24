@@ -4,7 +4,7 @@ use tokio::{net::TcpListener, sync::Semaphore};
 use futures::{SinkExt, StreamExt, Future};
 use tokio::{sync::{mpsc, broadcast}};
 use tokio_util::codec::{Framed, LengthDelimitedCodec};
-use tracing::{info, error};
+use tracing::{info, error, instrument};
 use crate::{service::Service, CmdRequest};
 
 
@@ -21,6 +21,7 @@ impl Server {
     }
 
     // 与客户端建立链接
+    #[instrument(name="server_execute",skip_all)]
     async fn execute(&self,notify_shutdown: &broadcast::Sender<()>,shutdown_complete_tx: &mpsc::Sender<()>) -> Result<(),Box<dyn Error>> {
         // 监听服务地址端口
         let listener = TcpListener::bind(&self.listen_address).await?;
@@ -71,6 +72,7 @@ impl Server {
         }
     }
     // 监听SIGINT信号和监听客户端连接
+    #[instrument(name="server_run",skip_all)]
     pub async fn run(&self, shutdown: impl Future) -> Result<(), Box<dyn Error>> {
         // 广播channel，用于给各子线程发送关闭信息
             let (notify_shutdown, _) = broadcast::channel(1);
