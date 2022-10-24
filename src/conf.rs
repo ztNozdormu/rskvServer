@@ -7,7 +7,7 @@ use serde::{Serialize, Deserialize};
 pub struct ServerConfig {
   pub listen_address : ListenAddress,
   pub rocks_db_path: RocksDbPath,
-  pub connects: MaxConnects
+  pub max_connects: MaxConnects
 }
 
 #[derive(Debug,Serialize,Deserialize)]

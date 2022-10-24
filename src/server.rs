@@ -1,8 +1,7 @@
 use std::{error::Error, sync::Arc};
 use prost::Message;
-use tokio::{net::TcpListener, sync::Semaphore};
+use tokio::{net::TcpListener, sync::{mpsc, broadcast,Semaphore}};
 use futures::{SinkExt, StreamExt, Future};
-use tokio::{sync::{mpsc, broadcast}};
 use tokio_util::codec::{Framed, LengthDelimitedCodec};
 use tracing::{info, error, instrument};
 use crate::{service::Service, CmdRequest};
@@ -72,7 +71,7 @@ impl Server {
         }
     }
     // 监听SIGINT信号和监听客户端连接
-    #[instrument(name="server_run",skip_all)]
+    // #[instrument(name="server_run",skip_all)]
     pub async fn run(&self, shutdown: impl Future) -> Result<(), Box<dyn Error>> {
         // 广播channel，用于给各子线程发送关闭信息
             let (notify_shutdown, _) = broadcast::channel(1);
