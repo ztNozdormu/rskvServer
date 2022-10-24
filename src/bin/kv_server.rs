@@ -16,6 +16,7 @@ async fn main() -> Result<(),Box<dyn Error>> {
     let server_config = ServerConfig::load("src/conf/server.conf")?;//"127.0.0.1:19999";
     let listen_address = server_config.listen_address.addr;
     let rocks_db_path = server_config.rocks_db_path.rocks_db_path;
+    let max_connects = server_config.connects.max_connects;
 
     // 初始化Service及存储 默认使用RocksDbStorage
     let service: Service = StorageService::new(RocksDbStorage::new(rocks_db_path))
@@ -23,7 +24,7 @@ async fn main() -> Result<(),Box<dyn Error>> {
                 .register_exec_event(|res|info!("[DEBUG] Receive req: {:?}",res))
                 .register_res_event(|res|info!("[DEBUG] Receive req: {:?}",res))
                 .into();
-    let server = Server::new(listen_address, service);
+    let server = Server::new(listen_address, service,max_connects);
 
     server.run(signal::ctrl_c()).await
 
