@@ -1,22 +1,23 @@
-use std::error::Error;
+use std::{error::Error, sync::Arc};
 use prost::Message;
 use tokio::net::TcpListener;
 use futures::{SinkExt, StreamExt, Future};
 use tokio::{sync::{mpsc, broadcast}};
 use tokio_util::codec::{Framed, LengthDelimitedCodec};
 use tracing::{info, error};
-use crate::{service::Service, CmdRequest};
+use crate::{service::Service, CmdRequest, MaxConnects};
 
 
 pub struct Server{
     listen_address: String, // server 监听地址
     service: Service, // 业务逻辑Service
+    max_connects: Arc<MaxConnects> // 最大连接数配置
 }
 
 impl Server {
 
-    pub fn new(listen_address: String, service: Service) -> Self {
-        Self { listen_address, service }
+    pub fn new(listen_address: String, service: Service,max_connects: u32) -> Self {
+        Self { listen_address, service,max_connects: Arc::new(MaxConnects::new(max_connects)) }
     }
 
     // 与客户端建立链接
