@@ -6,12 +6,21 @@ use kvserver::rocks_db_storage::RocksDbStorage;
 use kvserver::server::Server;
 use kvserver::service::{Service,StorageService};
 use tokio::signal;
-use tracing::info;
+use tracing::{info, span};
+use tracing_subscriber::EnvFilter;
+use tracing_subscriber::prelude::__tracing_subscriber_SubscriberExt;
+use tracing_subscriber::util::SubscriberInitExt;
 
 #[tokio::main]
 async fn main() -> Result<(),Box<dyn Error>> {
 
-    tracing_subscriber::fmt::init();
+    // tracing_subscriber::fmt::init();
+    // 测量监控逻辑
+    let tracer = opentelemetry_jaeger::new_agent_pipeline().with_service_name("kv_server").install_simple()?;
+    let tracing_layer = tracing_opentelemetry::layer().with_tracer(tracer);
+    tracing_subscriber::registry().with(EnvFilter::from_default_env()).with(tracing_layer).init();
+    let root = span!(tracing::Level::INFO,"ap_start",work_units=2);
+    let _enter = root.enter();
 
     let server_config = ServerConfig::load("src/conf/server.conf")?;//"127.0.0.1:19999";
     let listen_address = server_config.listen_address.addr;
