@@ -37,13 +37,6 @@ pub struct ConnectAddress{
   pub addr: String,
 }
 
-impl MaxConnects {
-  pub fn new(max_connects: u32)->Self {
-    Self {
-      max_connects
-    }
-  }
-}
 impl ServerConfig {
   pub fn load(path: &str) -> Result<Self,Box<dyn Error>> {
         let  content = fs::read_to_string(path)?;

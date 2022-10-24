@@ -1,23 +1,23 @@
 use std::{error::Error, sync::Arc};
 use prost::Message;
-use tokio::net::TcpListener;
+use tokio::{net::TcpListener, sync::Semaphore};
 use futures::{SinkExt, StreamExt, Future};
 use tokio::{sync::{mpsc, broadcast}};
 use tokio_util::codec::{Framed, LengthDelimitedCodec};
 use tracing::{info, error};
-use crate::{service::Service, CmdRequest, MaxConnects};
+use crate::{service::Service, CmdRequest};
 
 
 pub struct Server{
     listen_address: String, // server 监听地址
     service: Service, // 业务逻辑Service
-    max_connects: Arc<MaxConnects> // 最大连接数配置
+    max_connects: Arc<Semaphore> // 最大连接数配置
 }
 
 impl Server {
 
-    pub fn new(listen_address: String, service: Service,max_connects: u32) -> Self {
-        Self { listen_address, service,max_connects: Arc::new(MaxConnects::new(max_connects)) }
+    pub fn new(listen_address: String, service: Service,max_connects: usize) -> Self {
+        Self { listen_address, service,max_connects: Arc::new(Semaphore::new(max_connects)) }
     }
 
     // 与客户端建立链接
@@ -26,6 +26,8 @@ impl Server {
         let listener = TcpListener::bind(&self.listen_address).await?;
         println!("服务器端启动,服务监听地址:[{}]",self.listen_address);
         loop {
+            // 获取最大连接数
+            let permit = self.max_connects.clone().acquire_owned().await.unwrap();
             // 监听客户端请求
             let (stream,addr) = listener.accept().await?;
             info!("客户端: {:?} 链接地址",addr);
@@ -38,6 +40,8 @@ impl Server {
             tokio::spawn(async move {
                 // 使用Frame的LengthDelimitedCodec进行编解码操作
                 let mut stream= Framed::new(stream,LengthDelimitedCodec::new());
+                drop(permit);
+                // 循环读取客户端消息并处理
                 loop {
                     let mut buf = tokio::select! {
                         Some(Ok(buf)) = stream.next() => {
